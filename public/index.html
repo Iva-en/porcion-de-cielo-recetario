@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Porción de Cielo — Recetario de Repostería</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__inner">
+      <a href="/" class="logo">
+        <span class="logo__icon">✦</span>
+        <span class="logo__text">Porción de Cielo</span>
+      </a>
+
+      <nav class="nav">
+        <a href="#recetas" class="nav__link">Recetas</a>
+        <a href="#" class="nav__link" id="btnAbrirFormNav">Agregar</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="btn btn--primary" id="btnNuevaReceta">
+          <span>+ Nueva Receta</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Recetario artesanal</p>
+      <h1 class="hero__title">El arte dulce<br><em>de la repostería</em></h1>
+      <p class="hero__subtitle">Guarda, organiza y comparte tus recetas favoritas de repostería. Desde tortas hasta helados artesanales.</p>
+      <div class="hero__cta">
+        <button class="btn btn--hero" id="btnHeroCta">Explorar recetas</button>
+      </div>
+    </div>
+    <div class="hero__deco">
+      <div class="hero__circle hero__circle--1"></div>
+      <div class="hero__circle hero__circle--2"></div>
+      <div class="hero__circle hero__circle--3"></div>
+      <div class="hero__ornament">✦</div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-bar__inner">
+      <div class="stat">
+        <span class="stat__number" id="totalRecetas">0</span>
+        <span class="stat__label">Recetas totales</span>
+      </div>
+      <div class="stat__divider"></div>
+      <div class="stat">
+        <span class="stat__number" id="recetasFiltradas">0</span>
+        <span class="stat__label">Mostrando</span>
+      </div>
+      <div class="stat__divider"></div>
+      <div class="stat">
+        <span class="stat__number" id="promedioCalif">0</span>
+        <span class="stat__label">Calificación promedio</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <section class="filtros" id="recetas">
+    <div class="filtros__inner">
+      <div class="filtros__search">
+        <span class="filtros__search-icon">⌕</span>
+        <input type="text" id="buscador" class="filtros__input" placeholder="Buscar receta por nombre...">
+      </div>
+      <div class="filtros__selects">
+        <select id="filtroCategoria" class="filtros__select">
+          <option value="todas">Todas las categorías</option>
+          <option value="tortas">Tortas</option>
+          <option value="galletas">Galletas</option>
+          <option value="pasteles">Pasteles</option>
+          <option value="postres">Postres</option>
+          <option value="panes">Panes</option>
+          <option value="helados">Helados</option>
+          <option value="otros">Otros</option>
+        </select>
+        <select id="filtroDificultad" class="filtros__select">
+          <option value="todas">Toda dificultad</option>
+          <option value="facil">Fácil</option>
+          <option value="medio">Medio</option>
+          <option value="dificil">Difícil</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECETAS GRID -->
+  <main class="main">
+    <div class="recetas-grid" id="recetasGrid">
+      <!-- Cards generadas por JS -->
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-state__icon">✦</div>
+      <h3 class="empty-state__title">Sin recetas aún</h3>
+      <p class="empty-state__text">Agrega tu primera receta para comenzar tu recetario.</p>
+      <button class="btn btn--primary" id="btnEmptyCta">Crear primera receta</button>
+    </div>
+  </main>
+
+  <!-- MODAL DETALLE -->
+  <div class="modal-overlay" id="modalDetalle">
+    <div class="modal modal--detalle">
+      <button class="modal__close" id="cerrarDetalle">✕</button>
+      <div class="modal__body" id="detalleContent">
+        <!-- Detalle generado por JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL FORMULARIO -->
+  <div class="modal-overlay" id="modalFormulario">
+    <div class="modal modal--form">
+      <div class="modal__header">
+        <h2 class="modal__title" id="formTitulo">Nueva Receta</h2>
+        <button class="modal__close" id="cerrarFormulario">✕</button>
+      </div>
+      <div class="modal__body">
+        <form id="recetaForm" novalidate>
+          <input type="hidden" id="recetaId">
+
+          <div class="form-grid">
+            <!-- Nombre -->
+            <div class="form-group form-group--full">
+              <label class="form-label">Nombre de la receta *</label>
+              <input type="text" id="nombre" class="form-input" placeholder="Ej: Torta de chocolate belga" minlength="3" maxlength="100" required>
+              <span class="form-error" id="errorNombre"></span>
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-group form-group--full">
+              <label class="form-label">Descripción *</label>
+              <textarea id="descripcion" class="form-input form-textarea" placeholder="Describe brevemente esta receta..." minlength="10" required></textarea>
+              <span class="form-error" id="errorDescripcion"></span>
+            </div>
+
+            <!-- Categoría -->
+            <div class="form-group">
+              <label class="form-label">Categoría *</label>
+              <select id="categoria" class="form-input form-select" required>
+                <option value="">Seleccionar...</option>
+                <option value="tortas">Tortas</option>
+                <option value="galletas">Galletas</option>
+                <option value="pasteles">Pasteles</option>
+                <option value="postres">Postres</option>
+                <option value="panes">Panes</option>
+                <option value="helados">Helados</option>
+                <option value="otros">Otros</option>
+              </select>
+              <span class="form-error" id="errorCategoria"></span>
+            </div>
+
+            <!-- Dificultad -->
+            <div class="form-group">
+              <label class="form-label">Dificultad *</label>
+              <select id="dificultad" class="form-input form-select" required>
+                <option value="">Seleccionar...</option>
+                <option value="facil">Fácil</option>
+                <option value="medio">Medio</option>
+                <option value="dificil">Difícil</option>
+              </select>
+              <span class="form-error" id="errorDificultad"></span>
+            </div>
+
+            <!-- Tiempo preparación -->
+            <div class="form-group">
+              <label class="form-label">Tiempo preparación (min) *</label>
+              <input type="number" id="tiempoPreparacion" class="form-input" placeholder="30" min="1" required>
+              <span class="form-error" id="errorTiempoPreparacion"></span>
+            </div>
+
+            <!-- Tiempo horneado -->
+            <div class="form-group">
+              <label class="form-label">Tiempo horneado (min)</label>
+              <input type="number" id="tiempoHorneado" class="form-input" placeholder="0" min="0">
+            </div>
+
+            <!-- Porciones -->
+            <div class="form-group">
+              <label class="form-label">Porciones *</label>
+              <input type="number" id="porciones" class="form-input" placeholder="8" min="1" required>
+              <span class="form-error" id="errorPorciones"></span>
+            </div>
+
+            <!-- Calificación -->
+            <div class="form-group">
+              <label class="form-label">Calificación (0-5)</label>
+              <input type="number" id="calificacion" class="form-input" placeholder="5" min="0" max="5" step="0.1">
+            </div>
+
+            <!-- URL Imagen -->
+            <div class="form-group form-group--full">
+              <label class="form-label">URL de imagen (opcional)</label>
+              <input type="url" id="imagen" class="form-input" placeholder="https://...">
+            </div>
+          </div>
+
+          <!-- INGREDIENTES -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <h3 class="form-section__title">Ingredientes *</h3>
+              <button type="button" class="btn btn--sm btn--outline" id="btnAgregarIngrediente">+ Agregar</button>
+            </div>
+            <div id="ingredientesContainer">
+              <!-- Filas generadas por JS -->
+            </div>
+            <span class="form-error" id="errorIngredientes"></span>
+          </div>
+
+          <!-- PASOS -->
+          <div class="form-section">
+            <div class="form-section__header">
+              <h3 class="form-section__title">Pasos de preparación *</h3>
+              <button type="button" class="btn btn--sm btn--outline" id="btnAgregarPaso">+ Agregar</button>
+            </div>
+            <div id="pasosContainer">
+              <!-- Pasos generados por JS -->
+            </div>
+            <span class="form-error" id="errorPasos"></span>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn--ghost" id="btnCancelarForm">Cancelar</button>
+            <button type="submit" class="btn btn--primary" id="btnSubmitForm">Guardar Receta</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMACIÓN ELIMINAR -->
+  <div class="modal-overlay" id="modalConfirmar">
+    <div class="modal modal--confirm">
+      <div class="confirm__icon">⚠</div>
+      <h3 class="confirm__title">¿Eliminar receta?</h3>
+      <p class="confirm__text">Esta acción no se puede deshacer. La receta será eliminada permanentemente.</p>
+      <div class="confirm__actions">
+        <button class="btn btn--ghost" id="btnCancelarEliminar">Cancelar</button>
+        <button class="btn btn--danger" id="btnConfirmarEliminar">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">
+    <span class="toast__icon" id="toastIcon">✓</span>
+    <span class="toast__msg" id="toastMsg">Mensaje</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="logo logo--sm">Porción de Cielo</span>
+      <p class="footer__text">Recetario artesanal de repostería · Hecho con amor por Ivana Encarnacion 2023-1818</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
