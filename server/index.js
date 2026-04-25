@@ -1,3 +1,5 @@
+console.log("ENV:", process.env.MONGODB_URI);
+
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
